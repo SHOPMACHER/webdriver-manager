@@ -4,6 +4,7 @@ namespace Peridot\WebDriverManager\Console;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -23,6 +24,12 @@ class StartCommand extends AbstractManagerCommand
                 'port',
                 InputArgument::OPTIONAL,
                 'The port you want to start Selenium Server on'
+            )
+            ->addOption(
+                'silence',
+                's',
+                InputOption::VALUE_NONE,
+                'Whether or not the Selenium Server is started in background'
             );
     }
 
@@ -41,8 +48,12 @@ class StartCommand extends AbstractManagerCommand
         $update = $this->getApplication()->find('update');
         $update->run(new ArrayInput(['command' => 'update']), $output);
 
-        $output->writeln('<info>Starting Selenium Server...</info>');
-        $this->manager->startInForeground($port);
+        if($input->getOption('silence')) {
+            $this->manager->startInBackground($port);
+        } else {
+            $output->writeln('<info>Starting Selenium Server...</info>');
+            $this->manager->startInForeground($port);
+        }
         return 0;
     }
 } 
