@@ -11,7 +11,7 @@ class Versions
 {
     const SELENIUM = '2.48.2';
 
-    const CHROMEDRIVER = '2.35';
+    const CHROMEDRIVER = '2.40';
 
     const IEDRIVER = '2.48.0';
 
